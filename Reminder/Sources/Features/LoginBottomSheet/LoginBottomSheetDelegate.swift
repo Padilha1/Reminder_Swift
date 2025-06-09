@@ -11,7 +11,5 @@ import UIKit
 
 
 protocol LoginBottomSheetDelegate: AnyObject {
-    func sendLoginData(user: String, password: String){
-        
-    }
+    func sendLoginData(user: String, password: String)
 }

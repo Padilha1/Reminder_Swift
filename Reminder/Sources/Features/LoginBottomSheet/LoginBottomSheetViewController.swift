@@ -10,7 +10,18 @@ import UIKit
 
 class LoginBottomSheetViewController: UIViewController{
     let loginView = LoginBottomSheetView()
+    let loginViewModel = LoginBottomSheetViewModel()
     var handleAreaHeight: CGFloat = 50.0
+    public weak var flowDelegate: LoginBottomSheetFlowDelegate?
+    
+    init(flowDelegate: LoginBottomSheetFlowDelegate){
+        self.flowDelegate = flowDelegate
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +29,7 @@ class LoginBottomSheetViewController: UIViewController{
         loginView.delegate = self
         setupUI()
         setupGesture()
+        bindViewModel()
     }
     
     private func setupUI(){
@@ -33,6 +45,13 @@ class LoginBottomSheetViewController: UIViewController{
             loginView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
         ])
         let heightConstraint = loginView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.5).isActive = true
+    }
+    
+    private func bindViewModel(){
+        loginViewModel.successResult = {
+            [weak self] in
+            self?.flowDelegate?.navigateToHome()
+        }
     }
     
     private func setupGesture(){
@@ -59,6 +78,6 @@ class LoginBottomSheetViewController: UIViewController{
 
 extension LoginBottomSheetViewController: LoginBottomSheetDelegate{
     func sendLoginData(user: String, password: String) {
-        <#code#>
+        loginViewModel.doAuth(usernameLogin: user, password: password)
     }
 }
